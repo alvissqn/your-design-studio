@@ -10,33 +10,167 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UsersIndexRouteImport } from './routes/users/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as ReportsIndexRouteImport } from './routes/reports/index'
+import { Route as PackagesIndexRouteImport } from './routes/packages/index'
+import { Route as LocationsIndexRouteImport } from './routes/locations/index'
+import { Route as LeadsIndexRouteImport } from './routes/leads/index'
+import { Route as GeographyIndexRouteImport } from './routes/geography/index'
+import { Route as ChatIndexRouteImport } from './routes/chat/index'
+import { Route as CategoriesIndexRouteImport } from './routes/categories/index'
+import { Route as AmenitiesIndexRouteImport } from './routes/amenities/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UsersIndexRoute = UsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsIndexRoute = ReportsIndexRouteImport.update({
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PackagesIndexRoute = PackagesIndexRouteImport.update({
+  id: '/packages/',
+  path: '/packages/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsIndexRoute = LocationsIndexRouteImport.update({
+  id: '/locations/',
+  path: '/locations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadsIndexRoute = LeadsIndexRouteImport.update({
+  id: '/leads/',
+  path: '/leads/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GeographyIndexRoute = GeographyIndexRouteImport.update({
+  id: '/geography/',
+  path: '/geography/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatIndexRoute = ChatIndexRouteImport.update({
+  id: '/chat/',
+  path: '/chat/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesIndexRoute = CategoriesIndexRouteImport.update({
+  id: '/categories/',
+  path: '/categories/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AmenitiesIndexRoute = AmenitiesIndexRouteImport.update({
+  id: '/amenities/',
+  path: '/amenities/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/amenities/': typeof AmenitiesIndexRoute
+  '/categories/': typeof CategoriesIndexRoute
+  '/chat/': typeof ChatIndexRoute
+  '/geography/': typeof GeographyIndexRoute
+  '/leads/': typeof LeadsIndexRoute
+  '/locations/': typeof LocationsIndexRoute
+  '/packages/': typeof PackagesIndexRoute
+  '/reports/': typeof ReportsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/users/': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/amenities': typeof AmenitiesIndexRoute
+  '/categories': typeof CategoriesIndexRoute
+  '/chat': typeof ChatIndexRoute
+  '/geography': typeof GeographyIndexRoute
+  '/leads': typeof LeadsIndexRoute
+  '/locations': typeof LocationsIndexRoute
+  '/packages': typeof PackagesIndexRoute
+  '/reports': typeof ReportsIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/amenities/': typeof AmenitiesIndexRoute
+  '/categories/': typeof CategoriesIndexRoute
+  '/chat/': typeof ChatIndexRoute
+  '/geography/': typeof GeographyIndexRoute
+  '/leads/': typeof LeadsIndexRoute
+  '/locations/': typeof LocationsIndexRoute
+  '/packages/': typeof PackagesIndexRoute
+  '/reports/': typeof ReportsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/users/': typeof UsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/amenities/'
+    | '/categories/'
+    | '/chat/'
+    | '/geography/'
+    | '/leads/'
+    | '/locations/'
+    | '/packages/'
+    | '/reports/'
+    | '/settings/'
+    | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/amenities'
+    | '/categories'
+    | '/chat'
+    | '/geography'
+    | '/leads'
+    | '/locations'
+    | '/packages'
+    | '/reports'
+    | '/settings'
+    | '/users'
+  id:
+    | '__root__'
+    | '/'
+    | '/amenities/'
+    | '/categories/'
+    | '/chat/'
+    | '/geography/'
+    | '/leads/'
+    | '/locations/'
+    | '/packages/'
+    | '/reports/'
+    | '/settings/'
+    | '/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AmenitiesIndexRoute: typeof AmenitiesIndexRoute
+  CategoriesIndexRoute: typeof CategoriesIndexRoute
+  ChatIndexRoute: typeof ChatIndexRoute
+  GeographyIndexRoute: typeof GeographyIndexRoute
+  LeadsIndexRoute: typeof LeadsIndexRoute
+  LocationsIndexRoute: typeof LocationsIndexRoute
+  PackagesIndexRoute: typeof PackagesIndexRoute
+  ReportsIndexRoute: typeof ReportsIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
+  UsersIndexRoute: typeof UsersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +182,91 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/users/': {
+      id: '/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof UsersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/': {
+      id: '/reports/'
+      path: '/reports'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof ReportsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/packages/': {
+      id: '/packages/'
+      path: '/packages'
+      fullPath: '/packages/'
+      preLoaderRoute: typeof PackagesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations/': {
+      id: '/locations/'
+      path: '/locations'
+      fullPath: '/locations/'
+      preLoaderRoute: typeof LocationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leads/': {
+      id: '/leads/'
+      path: '/leads'
+      fullPath: '/leads/'
+      preLoaderRoute: typeof LeadsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/geography/': {
+      id: '/geography/'
+      path: '/geography'
+      fullPath: '/geography/'
+      preLoaderRoute: typeof GeographyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat/': {
+      id: '/chat/'
+      path: '/chat'
+      fullPath: '/chat/'
+      preLoaderRoute: typeof ChatIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories/': {
+      id: '/categories/'
+      path: '/categories'
+      fullPath: '/categories/'
+      preLoaderRoute: typeof CategoriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/amenities/': {
+      id: '/amenities/'
+      path: '/amenities'
+      fullPath: '/amenities/'
+      preLoaderRoute: typeof AmenitiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AmenitiesIndexRoute: AmenitiesIndexRoute,
+  CategoriesIndexRoute: CategoriesIndexRoute,
+  ChatIndexRoute: ChatIndexRoute,
+  GeographyIndexRoute: GeographyIndexRoute,
+  LeadsIndexRoute: LeadsIndexRoute,
+  LocationsIndexRoute: LocationsIndexRoute,
+  PackagesIndexRoute: PackagesIndexRoute,
+  ReportsIndexRoute: ReportsIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
+  UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
