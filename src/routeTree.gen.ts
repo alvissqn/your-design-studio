@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as ReportsIndexRouteImport } from './routes/reports/index'
+import { Route as RegisterIndexRouteImport } from './routes/register/index'
 import { Route as PackagesIndexRouteImport } from './routes/packages/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as LocationsIndexRouteImport } from './routes/locations/index'
 import { Route as LeadsIndexRouteImport } from './routes/leads/index'
 import { Route as GeographyIndexRouteImport } from './routes/geography/index'
@@ -41,9 +43,19 @@ const ReportsIndexRoute = ReportsIndexRouteImport.update({
   path: '/reports/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterIndexRoute = RegisterIndexRouteImport.update({
+  id: '/register/',
+  path: '/register/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PackagesIndexRoute = PackagesIndexRouteImport.update({
   id: '/packages/',
   path: '/packages/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocationsIndexRoute = LocationsIndexRouteImport.update({
@@ -85,7 +97,9 @@ export interface FileRoutesByFullPath {
   '/geography/': typeof GeographyIndexRoute
   '/leads/': typeof LeadsIndexRoute
   '/locations/': typeof LocationsIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/packages/': typeof PackagesIndexRoute
+  '/register/': typeof RegisterIndexRoute
   '/reports/': typeof ReportsIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/users/': typeof UsersIndexRoute
@@ -98,7 +112,9 @@ export interface FileRoutesByTo {
   '/geography': typeof GeographyIndexRoute
   '/leads': typeof LeadsIndexRoute
   '/locations': typeof LocationsIndexRoute
+  '/login': typeof LoginIndexRoute
   '/packages': typeof PackagesIndexRoute
+  '/register': typeof RegisterIndexRoute
   '/reports': typeof ReportsIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/users': typeof UsersIndexRoute
@@ -112,7 +128,9 @@ export interface FileRoutesById {
   '/geography/': typeof GeographyIndexRoute
   '/leads/': typeof LeadsIndexRoute
   '/locations/': typeof LocationsIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/packages/': typeof PackagesIndexRoute
+  '/register/': typeof RegisterIndexRoute
   '/reports/': typeof ReportsIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/users/': typeof UsersIndexRoute
@@ -127,7 +145,9 @@ export interface FileRouteTypes {
     | '/geography/'
     | '/leads/'
     | '/locations/'
+    | '/login/'
     | '/packages/'
+    | '/register/'
     | '/reports/'
     | '/settings/'
     | '/users/'
@@ -140,7 +160,9 @@ export interface FileRouteTypes {
     | '/geography'
     | '/leads'
     | '/locations'
+    | '/login'
     | '/packages'
+    | '/register'
     | '/reports'
     | '/settings'
     | '/users'
@@ -153,7 +175,9 @@ export interface FileRouteTypes {
     | '/geography/'
     | '/leads/'
     | '/locations/'
+    | '/login/'
     | '/packages/'
+    | '/register/'
     | '/reports/'
     | '/settings/'
     | '/users/'
@@ -167,7 +191,9 @@ export interface RootRouteChildren {
   GeographyIndexRoute: typeof GeographyIndexRoute
   LeadsIndexRoute: typeof LeadsIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
+  LoginIndexRoute: typeof LoginIndexRoute
   PackagesIndexRoute: typeof PackagesIndexRoute
+  RegisterIndexRoute: typeof RegisterIndexRoute
   ReportsIndexRoute: typeof ReportsIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
@@ -203,11 +229,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register/': {
+      id: '/register/'
+      path: '/register'
+      fullPath: '/register/'
+      preLoaderRoute: typeof RegisterIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/packages/': {
       id: '/packages/'
       path: '/packages'
       fullPath: '/packages/'
       preLoaderRoute: typeof PackagesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/locations/': {
@@ -263,7 +303,9 @@ const rootRouteChildren: RootRouteChildren = {
   GeographyIndexRoute: GeographyIndexRoute,
   LeadsIndexRoute: LeadsIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
+  LoginIndexRoute: LoginIndexRoute,
   PackagesIndexRoute: PackagesIndexRoute,
+  RegisterIndexRoute: RegisterIndexRoute,
   ReportsIndexRoute: ReportsIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
   UsersIndexRoute: UsersIndexRoute,

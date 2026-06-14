@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard, Building2, Tag, Wrench, MapPin, Users, UserCog,
   Target, MessageSquare, Calendar, Heart, Package, FileCheck, CreditCard,
-  AlertTriangle, Bell, Settings, History, ChevronDown, ChevronRight, MapPinned,
+  AlertTriangle, Bell, Settings, History, ChevronDown, ChevronRight, MapPinned, LogOut,
 } from "lucide-react";
+import { clearAuthState, getAuthState } from "@/lib/auth-store";
 
 type Item = {
   icon: any;
@@ -72,8 +73,10 @@ const groups: { title?: string; items: Item[] }[] = [
 
 export function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
   const currentSearch = location.search as Record<string, any>;
+  const authUser = getAuthState().user;
 
   // Hàm helper so khớp xem một link có đang active không
   const isLinkActive = (to: string, searchParams?: Record<string, any>, exact?: boolean) => {
@@ -217,16 +220,27 @@ export function Sidebar() {
           </div>
         ))}
       </nav>
-      <div className="p-3 border-t border-sidebar-border">
-        <button className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-secondary cursor-pointer">
-          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-info to-primary flex items-center justify-center text-white text-sm font-semibold">
-            AD
+      <div className="p-3 border-t border-sidebar-border space-y-1">
+        <button className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-secondary cursor-pointer transition-colors">
+          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-info to-primary flex items-center justify-center text-white text-sm font-semibold shrink-0">
+            {authUser?.name ? authUser.name.slice(0, 2).toUpperCase() : "AD"}
           </div>
-          <div className="flex-1 text-left">
-            <div className="text-sm font-semibold">Admin</div>
-            <div className="text-[11px] text-sidebar-muted">Super Administrator</div>
+          <div className="flex-1 text-left min-w-0">
+            <div className="text-sm font-semibold truncate">{authUser?.name ?? "Admin"}</div>
+            <div className="text-[11px] text-sidebar-muted truncate">{authUser?.role ?? "super_admin"}</div>
           </div>
-          <ChevronDown className="h-4 w-4 text-sidebar-muted" />
+          <ChevronDown className="h-4 w-4 text-sidebar-muted shrink-0" />
+        </button>
+        <button
+          id="sidebar-logout-btn"
+          onClick={() => {
+            clearAuthState();
+            navigate({ to: "/login" });
+          }}
+          className="w-full flex items-center gap-2.5 px-2 py-2 rounded-lg text-muted-foreground hover:bg-danger-soft hover:text-destructive transition-colors text-sm cursor-pointer"
+        >
+          <LogOut className="h-4 w-4" />
+          Đăng xuất
         </button>
       </div>
     </aside>

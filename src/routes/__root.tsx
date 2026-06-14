@@ -4,6 +4,8 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useNavigate,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -11,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { getAuthState } from "../lib/auth-store";
 
 function NotFoundComponent() {
   return (
@@ -113,13 +116,34 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+// Các route không cần xác thực
+const PUBLIC_ROUTES = ["/login", "/login/", "/register", "/register/"];
+
+// Guard kiểm tra auth state — redirect về /login nếu chưa đăng nhập
+function AuthGuard({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const { isAuthenticated } = getAuthState();
+    const isPublic = PUBLIC_ROUTES.some((r) => location.pathname === r || location.pathname.startsWith(r));
+    if (!isAuthenticated && !isPublic) {
+      navigate({ to: "/login" });
+    }
+  }, [location.pathname]);
+
+  return <>{children}</>;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthGuard>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </AuthGuard>
     </QueryClientProvider>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Sidebar } from "@/components/mapzest/Sidebar";
 import { TopBar } from "@/components/mapzest/TopBar";
 import { Input } from "@/components/ui/input";
@@ -51,6 +51,9 @@ import {
   Navigation,
   RefreshCw,
   Minus,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -112,15 +115,19 @@ const mockData: BDS[] = [
     images: [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80",
     ],
     description: "Căn hộ Duplex thông tầng siêu vip view panorama triệu đô ôm trọn Landmark 81 và sông Sài Gòn quyến rũ. Bố trí kính hộp chịu lực Low-E chống nóng cách âm tuyệt mỹ, nội thất đá cẩm thạch sang trọng, đèn rèm rọi tự động thông minh cao cấp. Tận hưởng tiện ích sảnh riêng sang trọng cao cấp.",
     utilities: ["Bể bơi vô cực", "Phòng Gym hiện đại", "Chỗ đỗ xe ô tô riêng", "Thang máy tốc độ cao", "An ninh chuyên nghiệp 24/7", "Ban công ngắm cảnh riêng"],
-    furniture: "Đầy đủ nội thất cao cấp",
-    legal: "Đang làm sổ / Có hợp đồng mua bán",
+    furniture: "Full toàn bộ nội thất cao cấp",
+    legal: "Sổ hồng chính chủ trao tay",
     handover: "Bán đứt",
-    lat: 10.77340,
-    lng: 106.72300,
-    createDate: "20:10:00 6/6/2026",
+    lat: 10.7734,
+    lng: 106.723,
+    createDate: "16:20:00 5/6/2026",
   },
   {
     id: "#P12579",
@@ -138,9 +145,20 @@ const mockData: BDS[] = [
     icon: Building,
     images: [
       "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1502005229762-fc1b2381f0db?auto=format&fit=crop&w=800&q=80",
     ],
     description: "Căn hộ 2 phòng ngủ, tầng cao view Landmark 81 cực đẹp. Đầy đủ nội thất cao cấp nhập khẩu, đang có hợp đồng thuê giá cao.",
-    utilities: ["Phòng gym", "Hồ bơi", "Công viên 14ha", "Trường học Vinschool", "Bệnh viện Vinmec"],
+    utilities: ["Phòng gym hiện đại", "Bể bơi ngoài trời", "Công viên 14ha rộng lớn", "Trường học Vinschool", "Bệnh viện Vinmec"],
+    furniture: "Đầy đủ nội thất cao cấp nhập khẩu",
+    legal: "Đã có sổ hồng",
+    handover: "Bán đứt kèm hợp đồng thuê",
+    lat: 10.795,
+    lng: 106.722,
+    createDate: "14:15:00 5/6/2026",
   },
   {
     id: "#P12578",
@@ -158,9 +176,20 @@ const mockData: BDS[] = [
     icon: HomeIcon,
     images: [
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1502005229762-fc1b2381f0db?auto=format&fit=crop&w=800&q=80",
     ],
     description: "Nhà phố đắc địa mặt tiền Đinh Tiên Hoàng, Quận 1. Diện tích 5x22m, 1 trệt 3 lầu sân thượng. Hiện đang cho thuê làm văn phòng đại diện ổn định.",
-    utilities: ["Mặt tiền đường lớn", "Khu kinh doanh sầm uất", "Sân thượng", "Chỗ đậu xe"],
+    utilities: ["Mặt tiền đường lớn", "Khu kinh doanh sầm uất", "Sân thượng rộng rãi", "Chỗ đậu xe ô tô riêng"],
+    furniture: "Nội thất văn phòng cơ bản",
+    legal: "Sổ hồng hoàn công đầy đủ",
+    handover: "Bán đứt giao nhà ngay",
+    lat: 10.79,
+    lng: 106.696,
+    createDate: "09:30:00 5/6/2026",
   },
   {
     id: "#P12577",
@@ -178,9 +207,20 @@ const mockData: BDS[] = [
     icon: Trees,
     images: [
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
     ],
     description: "Đất nền thổ cư 100%, sổ đỏ riêng xây dựng tự do. Hạ tầng hoàn thiện, đường nhựa 12m, vỉa hè cây xanh mát mẻ.",
-    utilities: ["Đường nhựa lớn", "Sổ đỏ riêng", "Gần khu công nghiệp", "Điện nước âm"],
+    utilities: ["Đường nhựa lớn", "Sổ đỏ riêng từng nền", "Gần khu công nghiệp", "Điện nước âm hiện đại"],
+    furniture: "Đất trống xây dựng tự do",
+    legal: "Sổ đỏ thổ cư 100%",
+    handover: "Bán đứt giao nền ngay",
+    lat: 10.612,
+    lng: 106.732,
+    createDate: "08:00:00 5/6/2026",
   },
   {
     id: "#P12576",
@@ -198,9 +238,20 @@ const mockData: BDS[] = [
     icon: Mountain,
     images: [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1502005229762-fc1b2381f0db?auto=format&fit=crop&w=800&q=80",
     ],
     description: "Căn hộ The Sun Avenue của Novaland mặt tiền Mai Chí Thọ. Thiết kế 2 phòng ngủ, 2WC hiện đại, bàn giao đầy đủ nội thất cơ bản chất lượng tốt.",
     utilities: ["Hồ bơi tràn bờ", "Trung tâm thương mại", "Khu BBQ", "Khu vui chơi trẻ em"],
+    furniture: "Đầy đủ nội thất cơ bản chất lượng tốt",
+    legal: "Hợp đồng mua bán chính chủ",
+    handover: "Bán đứt sang tên ngay",
+    lat: 10.781,
+    lng: 106.755,
+    createDate: "07:30:00 5/6/2026",
   },
   {
     id: "#P12575",
@@ -218,9 +269,20 @@ const mockData: BDS[] = [
     icon: Building2,
     images: [
       "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
     ],
     description: "Biệt thự nghỉ dưỡng 5 sao ven biển Bãi Dài Cam Ranh. Thiết kế sang trọng kiến trúc Địa Trung Hải, hồ bơi tràn bờ riêng tư.",
-    utilities: ["Sát biển", "Hồ bơi riêng", "Sân vườn rộng", "Dịch vụ 5 sao", "Sân Golf"],
+    utilities: ["Sát biển", "Hồ bơi riêng biệt", "Sân vườn rộng lớn", "Dịch vụ chuẩn 5 sao", "Sân Golf đẳng cấp"],
+    furniture: "Đầy đủ nội thất cao cấp tiêu chuẩn 5 sao",
+    legal: "Sổ hồng sở hữu lâu dài",
+    handover: "Bán đứt bàn giao ngay",
+    lat: 12.062,
+    lng: 109.215,
+    createDate: "16:00:00 4/6/2026",
   },
   {
     id: "#P12574",
@@ -238,15 +300,26 @@ const mockData: BDS[] = [
     icon: Building,
     images: [
       "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1497215842964-222b430db094?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
     ],
     description: "Mặt bằng văn phòng cao cấp tại tòa nhà cao nhất Việt Nam Landmark 81. Hỗ trợ đầy đủ tiện ích sảnh đón khách sang trọng, thẻ từ thang máy an ninh tuyệt đối.",
-    utilities: ["Thang máy tốc độ cao", "View toàn cảnh thành phố", "Phòng họp chung", "Lễ tân chuyên nghiệp"],
+    utilities: ["Thang máy tốc độ cao", "View toàn cảnh thành phố", "Phòng họp chung hiện đại", "Lễ tân chuyên nghiệp"],
+    furniture: "Bàn giao thô hoặc nội thất văn phòng cơ bản",
+    legal: "Hợp đồng thuê dài hạn pháp lý rõ ràng",
+    handover: "Cho thuê lâu dài từ 3 năm",
+    lat: 10.794,
+    lng: 106.722,
+    createDate: "10:30:00 3/6/2026",
   },
   {
     id: "#P12573",
     title: "Đất nền biệt thự Đà Lạt",
     type: "Đất nền",
-    price: "12.5 tỷ",
+    price: "12.50 tỷ",
     area: "280 m²",
     address: "Đường Hùng Vương, Phường 9",
     city: "Lâm Đồng",
@@ -258,9 +331,20 @@ const mockData: BDS[] = [
     icon: Trees,
     images: [
       "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
     ],
     description: "Đất xây dựng biệt thự view thung lũng thông reo tuyệt đẹp. Khu vực yên tĩnh, dân trí cao, pháp lý rõ ràng sổ hồng chính chủ.",
-    utilities: ["View thung lũng", "Sổ hồng riêng", "Khí hậu ôn đới", "Đường ô tô vào tận nơi"],
+    utilities: ["View thung lũng thông reo", "Sổ hồng riêng chính chủ", "Khí hậu ôn đới mát mẻ", "Đường ô tô lớn vào tận nơi"],
+    furniture: "Đất xây dựng tự do",
+    legal: "Sổ hồng chính chủ thổ cư 100%",
+    handover: "Bán đứt giao đất ngay",
+    lat: 11.94,
+    lng: 108.46,
+    createDate: "11:20:00 2/6/2026",
   },
 ];
 
@@ -269,12 +353,60 @@ function LocationsPage() {
   const [data, setData] = useState<BDS[]>(mockData);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBDS, setSelectedBDS] = useState<BDS | null>(null);
-  const [activeTab, setActiveTab] = useState<string>(search.filter || "all");
+  const navigate = useNavigate();
+  const activeTab = search.filter || "all";
+
+  const handleTabChange = (tabKey: string) => {
+    navigate({
+      search: (old) => ({
+        ...old,
+        filter: tabKey === "all" ? undefined : tabKey,
+      }),
+    });
+  };
+
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   
   // Filters state
   const [typeFilter, setTypeFilter] = useState("all");
   const [cityFilter, setCityFilter] = useState("all");
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [mapTab, setMapTab] = useState<"street" | "satellite" | "hybrid">("street");
+  const [zoomLevel, setZoomLevel] = useState(14);
+  const [isPinging, setIsPinging] = useState(false);
+  const [searchMapQuery, setSearchMapQuery] = useState("");
+
+  useEffect(() => {
+    if (selectedBDS) {
+      setActiveImageIndex(0);
+    }
+  }, [selectedBDS]);
+
+  const handleArchive = (id: string) => {
+    handleStatusChange(id, "archived");
+    setIsDetailOpen(false);
+  };
+
+  const handleRejectWithReason = (id: string) => {
+    const reason = window.prompt("Nhập lý do từ chối kiểm duyệt:");
+    if (reason !== null) {
+      handleStatusChange(id, "rejected");
+      toast.info(`Tin đăng bị từ chối với lý do: ${reason || "Không có lý do cụ thể"}`);
+      setIsDetailOpen(false);
+    }
+  };
+
+  const handleApprove = (id: string) => {
+    handleStatusChange(id, "published");
+    setIsDetailOpen(false);
+  };
+
+  const handleLocate = () => {
+    setIsPinging(true);
+    toast.success(`Đã định vị thành công tọa độ BDS tại khu vực: ${selectedBDS?.address || selectedBDS?.city}`);
+    setTimeout(() => setIsPinging(false), 2000);
+  };
 
   const handleToggleFeatured = (id: string) => {
     setData((prev) =>
@@ -305,6 +437,8 @@ function LocationsPage() {
     city: "Hồ Chí Minh",
     description: "",
     utilities: "",
+    coordinates: "",
+    furnitureLegal: "",
   });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -332,6 +466,45 @@ function LocationsPage() {
       toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
       return;
     }
+
+    // Phân tích tọa độ GPS nhập vào hoặc sinh ngẫu nhiên theo Thành phố
+    let lat = 10.7734;
+    let lng = 106.7230;
+    
+    if (newBDS.coordinates) {
+      const parts = newBDS.coordinates.split(",");
+      if (parts.length === 2) {
+        const parsedLat = parseFloat(parts[0].trim());
+        const parsedLng = parseFloat(parts[1].trim());
+        if (!isNaN(parsedLat) && !isNaN(parsedLng)) {
+          lat = parsedLat;
+          lng = parsedLng;
+        }
+      }
+    } else {
+      // Tự động giả lập tọa độ ngẫu nhiên gần trung tâm thành phố được chọn
+      const cityCoords: Record<string, { lat: number; lng: number }> = {
+        "Hồ Chí Minh": { lat: 10.7734, lng: 106.7230 },
+        "Hà Nội": { lat: 21.0285, lng: 105.8542 },
+        "Long An": { lat: 10.6120, lng: 106.7320 },
+        "Khánh Hòa": { lat: 12.2450, lng: 109.1940 },
+        "Lâm Đồng": { lat: 11.9404, lng: 108.4583 },
+      };
+      
+      const center = cityCoords[newBDS.city] || { lat: 10.7734, lng: 106.7230 };
+      lat = center.lat + (Math.random() - 0.5) * 0.03;
+      lng = center.lng + (Math.random() - 0.5) * 0.03;
+    }
+
+    // Phân tích nội thất & pháp lý
+    let furniture = "Đầy đủ nội thất cao cấp";
+    let legal = "Sổ hồng chính chủ trao tay";
+    if (newBDS.furnitureLegal) {
+      const parts = newBDS.furnitureLegal.split(",");
+      if (parts[0]) furniture = parts[0].trim();
+      if (parts[1]) legal = parts[1].trim();
+    }
+
     const createdBDS: BDS = {
       id: `#P${Math.floor(10000 + Math.random() * 90000)}`,
       title: newBDS.title,
@@ -347,9 +520,19 @@ function LocationsPage() {
       icon: newBDS.type === "Biệt thự" ? Building2 : newBDS.type === "Căn hộ" ? Building : HomeIcon,
       images: selectedImages.length > 0
         ? selectedImages
-        : ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"],
+        : [
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"
+          ],
       description: newBDS.description || "Không có mô tả chi tiết.",
-      utilities: newBDS.utilities ? newBDS.utilities.split(",").map(u => u.trim()) : [],
+      utilities: newBDS.utilities ? newBDS.utilities.split(",").map(u => u.trim()) : ["Chỗ đỗ xe ô tô riêng", "Phòng Gym hiện đại", "An ninh 24/7"],
+      furniture,
+      legal,
+      handover: "Bán đứt",
+      lat,
+      lng,
+      createDate: new Date().toLocaleTimeString("vi-VN") + " " + new Date().toLocaleDateString("vi-VN"),
     };
 
     setData([createdBDS, ...data]);
@@ -364,6 +547,8 @@ function LocationsPage() {
       city: "Hồ Chí Minh",
       description: "",
       utilities: "",
+      coordinates: "",
+      furnitureLegal: "",
     });
     toast.success("Đã tạo tin đăng bất động sản mới thành công!");
   };
@@ -432,7 +617,7 @@ function LocationsPage() {
               ].map((tab) => (
                 <button
                   key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
+                  onClick={() => handleTabChange(tab.key)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer flex items-center gap-1.5 ${
                     activeTab === tab.key
                       ? "bg-primary text-primary-foreground shadow-sm"
@@ -646,7 +831,7 @@ function LocationsPage() {
 
       {/* DETAIL DIALOG */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-5xl w-[95vw] md:max-w-4xl lg:max-w-5xl overflow-y-auto max-h-[90vh]">
           {selectedBDS && (
             <div className="space-y-4">
               <DialogHeader className="border-b border-border pb-3">
@@ -670,71 +855,349 @@ function LocationsPage() {
                 </DialogTitle>
               </DialogHeader>
 
-              {/* Photos */}
-              <div className="grid grid-cols-12 gap-3 h-48 overflow-hidden rounded-xl relative">
-                <div className="col-span-8 h-full relative">
+              {/* SLIDE HÌNH ẢNH (GIỐNG HÌNH 3) */}
+              <div className="space-y-3">
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                  <Eye className="h-3.5 w-3.5 text-primary" /> THƯ VIỆN HÌNH ẢNH CHI TIẾT
+                  <span className="text-[9px] font-normal lowercase text-muted-foreground ml-2">Nhấn thumbnail để chọn hình hiển thị đại diện lộ trình</span>
+                </div>
+                
+                {/* Ảnh chính lớn */}
+                <div className="relative aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-xl border border-border bg-slate-100 dark:bg-slate-950 flex items-center justify-center">
                   <img
-                    src={selectedBDS.images[0]}
-                    alt="Main"
-                    className="w-full h-full object-cover border border-border rounded-l-xl"
+                    src={selectedBDS.images[activeImageIndex] || selectedBDS.images[0]}
+                    alt="Main view"
+                    className="w-full h-full object-cover transition-all duration-300"
                   />
-                  <span className="absolute bottom-2.5 left-3.5 bg-blue-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow-md uppercase tracking-wider">
-                    MẶC ĐỊNH HIỂN THỊ
-                  </span>
+                  
+                  {/* Banner Mặc định hiển thị khi đang chọn ảnh đầu tiên */}
+                  {activeImageIndex === 0 && (
+                    <span className="absolute bottom-3 left-3 bg-blue-600 text-white text-[9px] font-bold px-2.5 py-1.5 rounded shadow-lg uppercase tracking-wider">
+                      MẶC ĐỊNH HIỂN THỊ
+                    </span>
+                  )}
+                  
+                  {/* Navigation Arrows trên ảnh lớn */}
+                  {selectedBDS.images.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setActiveImageIndex((prev) => (prev === 0 ? selectedBDS.images.length - 1 : prev - 1))}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-2 transition cursor-pointer z-10"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveImageIndex((prev) => (prev === selectedBDS.images.length - 1 ? 0 : prev + 1))}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-2 transition cursor-pointer z-10"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                    </>
+                  )}
                 </div>
-                <div className="col-span-4 h-full">
-                  <img
-                    src={selectedBDS.images[1] || selectedBDS.images[0]}
-                    alt="Gallery"
-                    className="w-full h-full object-cover border border-border rounded-r-xl"
-                  />
-                </div>
-              </div>
 
-              {/* Details Info Grid */}
-              <div className="grid grid-cols-3 gap-4 border-y border-border py-3 text-center my-3 text-xs">
-                <div>
-                  <div className="text-[11px] text-muted-foreground uppercase font-semibold">Giá yêu cầu</div>
-                  <div className="text-sm font-bold mt-1 text-primary">{selectedBDS.price}</div>
-                </div>
-                <div className="border-x border-border">
-                  <div className="text-[11px] text-muted-foreground uppercase font-semibold">Diện tích</div>
-                  <div className="text-sm font-bold mt-1 text-foreground">{selectedBDS.area}</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-[11px] text-muted-foreground uppercase font-semibold">Đăng bởi</div>
-                  <div className="text-sm font-bold mt-1 text-foreground flex items-center justify-center gap-1">
-                    <User className="h-4 w-4 text-muted-foreground" />
-                    {selectedBDS.user}
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <h4 className="font-semibold text-sm mb-1.5 text-foreground">Mô tả chi tiết</h4>
-                <p className="text-xs text-muted-foreground leading-relaxed bg-secondary/25 dark:bg-secondary/10 p-3 rounded-lg border border-border/40">
-                  {selectedBDS.description}
-                </p>
-              </div>
-
-              {/* Utilities */}
-              <div>
-                <h4 className="font-semibold text-sm mb-2 text-foreground">Tiện ích BĐS</h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {selectedBDS.utilities && selectedBDS.utilities.map((u, i) => (
-                    <Badge key={i} variant="secondary" className="bg-secondary text-foreground border-0 text-xs px-2.5 py-1">
-                      {u}
-                    </Badge>
+                {/* Hàng ảnh thumbnail nhỏ */}
+                <div className="grid grid-cols-6 gap-2 mt-2">
+                  {selectedBDS.images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`relative aspect-video rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${
+                        activeImageIndex === idx
+                          ? "border-blue-600 shadow-md scale-[1.02]"
+                          : "border-border hover:border-muted-foreground/50"
+                      }`}
+                    >
+                      <img src={img} alt={`Thumb ${idx + 1}`} className="w-full h-full object-cover" />
+                      
+                      {/* Icon Ngôi sao nền xanh tròn ở góc trái ảnh đại diện (idx = 0) */}
+                      {idx === 0 && (
+                        <div className="absolute top-1 left-1 bg-blue-600 text-white rounded-full p-0.5 shadow-sm">
+                          <Star className="h-2.5 w-2.5 fill-white stroke-none" />
+                        </div>
+                      )}
+                    </button>
                   ))}
                 </div>
               </div>
 
-              {/* Footer Buttons */}
-              <DialogFooter className="gap-2 sm:gap-0 mt-4 border-t border-border pt-4">
-                <div className="flex gap-2 mr-auto">
+              {/* HAI CỘT CHÍNH (GIỐNG HÌNH 2) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border">
+                
+                {/* Cột 1: Thông số kỹ thuật & Mô tả */}
+                <div className="space-y-4">
+                  <div className="bg-secondary/10 dark:bg-secondary/5 rounded-xl border border-border/80 p-4 space-y-4">
+                    <div className="text-xs font-bold text-foreground pb-2 border-b border-border/50 uppercase tracking-wider">
+                      THÔNG SỐ KỸ THUẬT CHI TIẾT
+                    </div>
+                    
+                    <div>
+                      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                        NỘI DUNG MÔ TẢ CỦA MÔI GIỚI:
+                      </div>
+                      <p className="text-xs text-foreground leading-relaxed whitespace-pre-wrap">
+                        {selectedBDS.description}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-3 pt-3 border-t border-border/50 text-xs">
+                      <div>
+                        <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wide">Diện tích sử dụng:</div>
+                        <div className="text-sm font-semibold text-foreground mt-0.5">{selectedBDS.area}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wide">Tình trạng nội thất:</div>
+                        <div className="text-sm font-semibold text-foreground mt-0.5">{selectedBDS.furniture || "Full toàn bộ nội thất cao cấp"}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wide">Pháp lý giấy tờ:</div>
+                        <div className="text-sm font-semibold text-foreground mt-0.5">{selectedBDS.legal || "Sổ hồng chính chủ trao tay"}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wide">Hình thức bàn giao:</div>
+                        <div className="text-sm font-semibold text-foreground mt-0.5">{selectedBDS.handover || "Bán đứt"}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">
+                      DANH SÁCH TIỆN ÍCH ĐI KÈM:
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {selectedBDS.utilities && selectedBDS.utilities.map((u, i) => (
+                        <div key={i} className="flex items-center gap-1.5 bg-card border border-border/60 rounded-lg px-3 py-2 text-xs text-foreground shadow-xs">
+                          <span className="text-emerald-500 font-bold text-base">✓</span>
+                          <span className="truncate">{u}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Cột 2: Bản đồ khảo sát tọa độ */}
+                <div className="h-full">
+                  <div className="bg-card rounded-xl border border-border/80 p-4 space-y-3 flex flex-col h-full min-h-[360px]">
+                    <div className="flex items-center justify-between text-xs border-b border-border pb-2">
+                      <div className="font-bold text-foreground flex items-center gap-1.5">
+                        <MapPin className="h-4 w-4 text-primary animate-bounce" />
+                        BẢN ĐỒ KHẢO SÁT TỌA ĐỘ VỊ TRÍ
+                      </div>
+                      <div className="text-[10px] text-blue-600 font-bold tracking-wider uppercase">
+                        MẠNG LƯỚI ĐỘC QUYỀN MAPZEST
+                      </div>
+                    </div>
+
+                    {/* Search & Locate bar */}
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+                        <Input
+                          placeholder="Tìm kiếm dự án, đường phố, quận huyện hoặc tọa độ"
+                          className="pl-8 text-xs h-9 bg-secondary/20 border-border/80 focus:bg-background"
+                          value={searchMapQuery}
+                          onChange={(e) => setSearchMapQuery(e.target.value)}
+                        />
+                      </div>
+                      <Button size="sm" onClick={handleLocate} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-9 px-3 text-xs cursor-pointer flex items-center gap-1">
+                        <Navigation className="h-3 w-3 fill-white" /> Định vị
+                      </Button>
+                    </div>
+
+                    {/* Tabs */}
+                    <div className="flex bg-secondary/30 p-0.5 rounded-lg border border-border/40 text-xs self-start">
+                      {(["street", "satellite", "hybrid"] as const).map((tab) => (
+                        <button
+                          key={tab}
+                          type="button"
+                          onClick={() => setMapTab(tab)}
+                          className={`px-3 py-1 rounded-md transition cursor-pointer font-medium ${
+                            mapTab === tab
+                              ? "bg-background text-foreground shadow-xs font-semibold"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {tab === "street" ? "Xem Đường phố" : tab === "satellite" ? "Vệ tinh" : "Hỗn hợp"}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Map Canvas wrapper */}
+                    <div className="relative flex-1 min-h-[220px] rounded-lg border border-border overflow-hidden bg-slate-50 dark:bg-slate-900 shadow-inner">
+                      {/* Map Content */}
+                      <div
+                        className="w-full h-full relative transition-all duration-500 overflow-hidden"
+                        style={{
+                          backgroundColor:
+                            mapTab === "street"
+                              ? "#e8ecef"
+                              : mapTab === "satellite"
+                              ? "#111827"
+                              : "#1f2937",
+                          backgroundImage:
+                            mapTab === "street"
+                              ? "radial-gradient(#dee2e6 1.5px, transparent 1.5px)"
+                              : "radial-gradient(#374151 1.5px, transparent 1.5px)",
+                          backgroundSize: "24px 24px",
+                        }}
+                      >
+                        {/* SVG Drawing for streets and river */}
+                        <svg
+                          className="absolute inset-0 w-full h-full opacity-90 transition-transform duration-300"
+                          style={{
+                            transform: `scale(${1 + (zoomLevel - 14) * 0.15})`,
+                            transformOrigin: "center",
+                          }}
+                          viewBox="0 0 400 300"
+                        >
+                          {/* Sông ngòi */}
+                          <path
+                            d="M -50 180 Q 150 140, 220 220 T 450 180"
+                            fill="none"
+                            stroke={mapTab === "street" ? "#a5f3fc" : "#0e7490"}
+                            strokeWidth="32"
+                            strokeLinecap="round"
+                            opacity="0.8"
+                          />
+
+                          {/* Công viên xanh */}
+                          <rect
+                            x="240"
+                            y="70"
+                            width="120"
+                            height="70"
+                            rx="12"
+                            fill={mapTab === "street" ? "#dcfce7" : "#065f46"}
+                            stroke={mapTab === "street" ? "#86efac" : "#047857"}
+                            strokeWidth="1.5"
+                            opacity="0.75"
+                          />
+                          <text
+                            x="300"
+                            y="105"
+                            textAnchor="middle"
+                            fill={mapTab === "street" ? "#15803d" : "#34d399"}
+                            fontSize="9"
+                            fontWeight="bold"
+                            fontFamily="sans-serif"
+                          >
+                            Công viên Trung tâm
+                          </text>
+
+                          {/* Đường lớn */}
+                          <path
+                            d="M -20 200 L 420 200"
+                            fill="none"
+                            stroke={mapTab === "street" ? "#ffffff" : "#4b5563"}
+                            strokeWidth="16"
+                            opacity="0.9"
+                          />
+                          <path
+                            d="M -20 200 L 420 200"
+                            fill="none"
+                            stroke={mapTab === "street" ? "#fef08a" : "#9ca3af"}
+                            strokeWidth="2"
+                            strokeDasharray="4 4"
+                            opacity="0.9"
+                          />
+                          
+                          <path
+                            d="M 180 -20 L 180 320"
+                            fill="none"
+                            stroke={mapTab === "street" ? "#ffffff" : "#4b5563"}
+                            strokeWidth="12"
+                            opacity="0.9"
+                          />
+
+                          {/* Labels */}
+                          <text
+                            x="60"
+                            y="196"
+                            fill={mapTab === "street" ? "#475569" : "#d1d5db"}
+                            fontSize="8"
+                            fontWeight="600"
+                            fontFamily="sans-serif"
+                          >
+                            {selectedBDS.address.toUpperCase().includes("MAI CHÍ THỌ") ? "ĐẠI LỘ MAI CHÍ THỌ" : `ĐƯỜNG ${selectedBDS.address.split(",")[0].toUpperCase()}`}
+                          </text>
+                          <text
+                            x="15"
+                            y="45"
+                            fill={mapTab === "street" ? "#64748b" : "#9ca3af"}
+                            fontSize="8"
+                            fontWeight="bold"
+                            fontFamily="sans-serif"
+                          >
+                            KHU ĐÔ THỊ TRUNG TÂM
+                          </text>
+                        </svg>
+
+                        {/* Marker & Tooltip (Tự động canh giữa bản đồ) */}
+                        <div className="absolute top-[50%] left-[45%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10">
+                          {/* Tooltip đen */}
+                          <div className="bg-black/90 text-white text-[10px] font-medium py-1.5 px-2.5 rounded shadow-lg border border-white/10 mb-1 flex items-center gap-1 max-w-[200px] whitespace-nowrap animate-in fade-in slide-in-from-bottom-2 duration-300">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                            {selectedBDS.address.split(",")[0]}, {selectedBDS.city}
+                          </div>
+
+                          {/* Marker pin */}
+                          <div className="relative">
+                            <MapPin className="h-7 w-7 text-blue-600 fill-blue-100 filter drop-shadow animate-bounce" />
+                            {isPinging && (
+                              <span className="absolute -inset-2 rounded-full bg-blue-500/40 animate-ping z-[-1]"></span>
+                            )}
+                            <span className="absolute top-[6px] left-[10px] w-2 h-2 rounded-full bg-blue-600"></span>
+                          </div>
+                        </div>
+
+                        {/* Zoom Controls */}
+                        <div className="absolute bottom-3 right-3 flex flex-col gap-1.5 z-10">
+                          <button
+                            type="button"
+                            onClick={() => setZoomLevel((prev) => Math.min(prev + 1, 18))}
+                            className="bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer border border-border flex items-center justify-center h-8 w-8 font-bold"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setZoomLevel((prev) => Math.max(prev - 1, 10))}
+                            className="bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer border border-border flex items-center justify-center h-8 w-8 font-bold"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                        </div>
+
+                        {/* Zoom scale info badge */}
+                        <div className="absolute bottom-3 left-3 bg-black/75 backdrop-blur-xs text-white text-[10px] font-semibold py-1 px-2 rounded-md z-10 select-none shadow-sm flex items-center gap-1 border border-white/5">
+                          <Navigation className="h-2.5 w-2.5 fill-white text-white rotate-45" /> Tỷ lệ Thu phóng: {zoomLevel}x
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* FOOTER ĐẸP KẾT HỢP HÌNH 2 & TÍNH NĂNG CŨ */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 border-t border-border pt-4 text-xs">
+                
+                {/* Ngày tạo ở góc trái */}
+                <div className="text-muted-foreground font-medium flex items-center gap-1.5 self-start sm:self-center">
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                  Ngày tạo: {selectedBDS.createDate || "16:20:00 5/6/2026"}
+                </div>
+                
+                {/* Các nút hành động bên phải */}
+                <div className="flex flex-wrap items-center justify-end gap-2 w-full sm:w-auto">
+                  
+                  {/* Nút đặt nổi bật (Bảo toàn tính năng cũ) */}
                   <Button
                     variant="outline"
+                    type="button"
                     onClick={() => {
                       handleToggleFeatured(selectedBDS.id);
                       setSelectedBDS(prev => prev ? { ...prev, isFeatured: !prev.isFeatured } : null);
@@ -748,34 +1211,52 @@ function LocationsPage() {
                     <Star className={`h-3.5 w-3.5 ${selectedBDS.isFeatured ? "fill-amber-500" : ""}`} />
                     {selectedBDS.isFeatured ? "Hủy nổi bật" : "Đặt nổi bật"}
                   </Button>
-                </div>
-                <Button variant="outline" onClick={() => setIsDetailOpen(false)} className="cursor-pointer">
-                  Đóng
-                </Button>
-                {selectedBDS.status === "pending" && (
-                  <div className="flex gap-2">
+
+                  {/* Nút Khóa/Ẩn tin tức (Hình 2) */}
+                  {selectedBDS.status !== "archived" && (
                     <Button
                       variant="outline"
-                      className="bg-danger-soft hover:bg-destructive text-destructive hover:text-destructive-foreground border-0 cursor-pointer"
-                      onClick={() => {
-                        handleStatusChange(selectedBDS.id, "rejected");
-                        setIsDetailOpen(false);
-                      }}
+                      type="button"
+                      onClick={() => handleArchive(selectedBDS.id)}
+                      className="cursor-pointer text-xs h-9 hover:bg-secondary/80"
                     >
-                      Từ chối
+                      Khóa/Ẩn tin tức
                     </Button>
+                  )}
+
+                  {/* Nút Từ chối có lý do (Hình 2) */}
+                  {selectedBDS.status === "pending" && (
                     <Button
-                      className="bg-success text-success-foreground hover:bg-success/90 border-0 cursor-pointer"
-                      onClick={() => {
-                        handleStatusChange(selectedBDS.id, "published");
-                        setIsDetailOpen(false);
-                      }}
+                      type="button"
+                      className="bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 border border-red-200/50 dark:border-red-900/30 font-semibold cursor-pointer text-xs h-9"
+                      onClick={() => handleRejectWithReason(selectedBDS.id)}
                     >
-                      Duyệt & Đăng
+                      Từ chối có lý do
                     </Button>
-                  </div>
-                )}
-              </DialogFooter>
+                  )}
+
+                  {/* Nút Kiểm định & Duyệt hiển thị / Duyệt & Đăng (Hình 2 + 1) */}
+                  {selectedBDS.status === "pending" && (
+                    <Button
+                      type="button"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold cursor-pointer text-xs h-9"
+                      onClick={() => handleApprove(selectedBDS.id)}
+                    >
+                      Kiểm định & Duyệt hiển thị
+                    </Button>
+                  )}
+
+                  {/* Nút Đóng lại (Hình 2) */}
+                  <Button
+                    type="button"
+                    className="bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 font-semibold cursor-pointer text-xs h-9"
+                    onClick={() => setIsDetailOpen(false)}
+                  >
+                    Đóng lại
+                  </Button>
+                </div>
+              </div>
+
             </div>
           )}
         </DialogContent>
@@ -872,6 +1353,25 @@ function LocationsPage() {
                 value={newBDS.address}
                 onChange={(e) => setNewBDS({ ...newBDS, address: e.target.value })}
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="font-semibold text-xs text-foreground">Tọa độ GPS (Vĩ độ, Kinh độ) - Không bắt buộc</label>
+                <Input
+                  placeholder="Ví dụ: 10.7734, 106.7230"
+                  value={newBDS.coordinates}
+                  onChange={(e) => setNewBDS({ ...newBDS, coordinates: e.target.value })}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="font-semibold text-xs text-foreground">Nội thất / Pháp lý - Không bắt buộc</label>
+                <Input
+                  placeholder="Cách nhau bằng dấu phẩy. Ví dụ: Đầy đủ nội thất, Sổ hồng chính chủ"
+                  value={newBDS.furnitureLegal}
+                  onChange={(e) => setNewBDS({ ...newBDS, furnitureLegal: e.target.value })}
+                />
+              </div>
             </div>
 
             <div className="space-y-1">
